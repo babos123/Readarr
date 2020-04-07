@@ -1,4 +1,3 @@
-using System.Linq;
 using NLog;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
@@ -17,21 +16,21 @@ namespace NzbDrone.Core.MediaFiles.TrackImport.Specifications
 
         public Decision IsSatisfiedBy(LocalTrack item, DownloadClientItem downloadClientItem)
         {
-            var trackFiles = item.Tracks.Where(e => e.TrackFileId != 0).Select(e => e.TrackFile).ToList();
-
-            if (trackFiles.Count == 0)
+            if (item.Album.BookFileId == 0)
             {
                 _logger.Debug("No existing track file, skipping");
                 return Decision.Accept();
             }
 
-            if (trackFiles.Count > 1)
+            var trackFile = item.Album?.BookFile?.Value;
+
+            if (trackFile == null)
             {
-                _logger.Debug("More than one existing track file, skipping.");
+                _logger.Debug("No existing track file, skipping");
                 return Decision.Accept();
             }
 
-            if (trackFiles.First().Value.Size == item.Size)
+            if (trackFile.Size == item.Size)
             {
                 _logger.Debug("'{0}' Has the same filesize as existing file", item.Path);
                 return Decision.Reject("Has the same filesize as existing file");

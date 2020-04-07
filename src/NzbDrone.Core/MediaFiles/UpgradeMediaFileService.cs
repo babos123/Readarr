@@ -9,7 +9,7 @@ namespace NzbDrone.Core.MediaFiles
 {
     public interface IUpgradeMediaFiles
     {
-        TrackFileMoveResult UpgradeTrackFile(TrackFile trackFile, LocalTrack localTrack, bool copyOnly = false);
+        TrackFileMoveResult UpgradeTrackFile(BookFile trackFile, LocalTrack localTrack, bool copyOnly = false);
     }
 
     public class UpgradeMediaFileService : IUpgradeMediaFiles
@@ -36,27 +36,22 @@ namespace NzbDrone.Core.MediaFiles
             _logger = logger;
         }
 
-        public TrackFileMoveResult UpgradeTrackFile(TrackFile trackFile, LocalTrack localTrack, bool copyOnly = false)
+        public TrackFileMoveResult UpgradeTrackFile(BookFile trackFile, LocalTrack localTrack, bool copyOnly = false)
         {
             var moveFileResult = new TrackFileMoveResult();
-            var existingFiles = localTrack.Tracks
-                                            .Where(e => e.TrackFileId > 0)
-                                            .Select(e => e.TrackFile.Value)
-                                            .Where(e => e != null)
-                                            .GroupBy(e => e.Id)
-                                            .ToList();
+            var existingFiles = localTrack.Album.BookFile.Value;
 
             var rootFolder = _diskProvider.GetParentFolder(localTrack.Artist.Path);
 
             // If there are existing track files and the root folder is missing, throw, so the old file isn't left behind during the import process.
-            if (existingFiles.Any() && !_diskProvider.FolderExists(rootFolder))
+            if (existingFiles != null && !_diskProvider.FolderExists(rootFolder))
             {
                 throw new RootFolderNotFoundException($"Root folder '{rootFolder}' was not found.");
             }
 
-            foreach (var existingFile in existingFiles)
+            if (existingFiles != null)
             {
-                var file = existingFile.First();
+                var file = existingFiles;
                 var trackFilePath = file.Path;
                 var subfolder = rootFolder.GetRelativePath(_diskProvider.GetParentFolder(trackFilePath));
 

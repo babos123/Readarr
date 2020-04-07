@@ -21,7 +21,7 @@ namespace Readarr.Api.V1.Artist
         public bool Ended => Status == ArtistStatusType.Ended;
 
         public string ArtistName { get; set; }
-        public string ForeignArtistId { get; set; }
+        public string ForeignAuthorId { get; set; }
         public string MBId { get; set; }
         public int TADBId { get; set; }
         public int DiscogsId { get; set; }
@@ -31,11 +31,10 @@ namespace Readarr.Api.V1.Artist
         public string Disambiguation { get; set; }
         public List<Links> Links { get; set; }
 
-        public Album NextAlbum { get; set; }
-        public Album LastAlbum { get; set; }
+        public Book NextAlbum { get; set; }
+        public Book LastAlbum { get; set; }
 
         public List<MediaCover> Images { get; set; }
-        public List<Member> Members { get; set; }
 
         public string RemotePoster { get; set; }
 
@@ -62,7 +61,7 @@ namespace Readarr.Api.V1.Artist
 
     public static class ArtistResourceMapper
     {
-        public static ArtistResource ToResource(this NzbDrone.Core.Music.Artist model)
+        public static ArtistResource ToResource(this NzbDrone.Core.Music.Author model)
         {
             if (model == null)
             {
@@ -72,7 +71,7 @@ namespace Readarr.Api.V1.Artist
             return new ArtistResource
             {
                 Id = model.Id,
-                ArtistMetadataId = model.ArtistMetadataId,
+                ArtistMetadataId = model.AuthorMetadataId,
 
                 ArtistName = model.Name,
 
@@ -91,11 +90,10 @@ namespace Readarr.Api.V1.Artist
                 MetadataProfileId = model.MetadataProfileId,
                 Links = model.Metadata.Value.Links,
 
-                AlbumFolder = model.AlbumFolder,
                 Monitored = model.Monitored,
 
                 CleanName = model.CleanName,
-                ForeignArtistId = model.Metadata.Value.ForeignArtistId,
+                ForeignAuthorId = model.Metadata.Value.ForeignAuthorId,
 
                 // Root folder path is now calculated from the artist path
                 // RootFolderPath = model.RootFolderPath,
@@ -109,20 +107,20 @@ namespace Readarr.Api.V1.Artist
             };
         }
 
-        public static NzbDrone.Core.Music.Artist ToModel(this ArtistResource resource)
+        public static NzbDrone.Core.Music.Author ToModel(this ArtistResource resource)
         {
             if (resource == null)
             {
                 return null;
             }
 
-            return new NzbDrone.Core.Music.Artist
+            return new NzbDrone.Core.Music.Author
             {
                 Id = resource.Id,
 
-                Metadata = new NzbDrone.Core.Music.ArtistMetadata
+                Metadata = new NzbDrone.Core.Music.AuthorMetadata
                 {
-                    ForeignArtistId = resource.ForeignArtistId,
+                    ForeignAuthorId = resource.ForeignAuthorId,
                     Name = resource.ArtistName,
                     Status = resource.Status,
                     Overview = resource.Overview,
@@ -139,7 +137,6 @@ namespace Readarr.Api.V1.Artist
                 QualityProfileId = resource.QualityProfileId,
                 MetadataProfileId = resource.MetadataProfileId,
 
-                AlbumFolder = resource.AlbumFolder,
                 Monitored = resource.Monitored,
 
                 CleanName = resource.CleanName,
@@ -151,7 +148,7 @@ namespace Readarr.Api.V1.Artist
             };
         }
 
-        public static NzbDrone.Core.Music.Artist ToModel(this ArtistResource resource, NzbDrone.Core.Music.Artist artist)
+        public static NzbDrone.Core.Music.Author ToModel(this ArtistResource resource, NzbDrone.Core.Music.Author artist)
         {
             var updatedArtist = resource.ToModel();
 
@@ -160,12 +157,12 @@ namespace Readarr.Api.V1.Artist
             return artist;
         }
 
-        public static List<ArtistResource> ToResource(this IEnumerable<NzbDrone.Core.Music.Artist> artist)
+        public static List<ArtistResource> ToResource(this IEnumerable<NzbDrone.Core.Music.Author> artist)
         {
             return artist.Select(ToResource).ToList();
         }
 
-        public static List<NzbDrone.Core.Music.Artist> ToModel(this IEnumerable<ArtistResource> resources)
+        public static List<NzbDrone.Core.Music.Author> ToModel(this IEnumerable<ArtistResource> resources)
         {
             return resources.Select(ToModel).ToList();
         }

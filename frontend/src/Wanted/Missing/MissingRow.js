@@ -14,8 +14,7 @@ function MissingRow(props) {
     id,
     artist,
     releaseDate,
-    albumType,
-    foreignAlbumId,
+    foreignBookId,
     title,
     disambiguation,
     isSelected,
@@ -46,33 +45,25 @@ function MissingRow(props) {
             return null;
           }
 
-          if (name === 'artist.sortName') {
+          if (name === 'authors.sortName') {
             return (
               <TableRowCell key={name}>
                 <ArtistNameLink
-                  foreignArtistId={artist.foreignArtistId}
+                  foreignAuthorId={artist.foreignAuthorId}
                   artistName={artist.artistName}
                 />
               </TableRowCell>
             );
           }
 
-          if (name === 'albumTitle') {
+          if (name === 'books.title') {
             return (
               <TableRowCell key={name}>
                 <AlbumTitleLink
-                  foreignAlbumId={foreignAlbumId}
+                  foreignBookId={foreignBookId}
                   title={title}
                   disambiguation={disambiguation}
                 />
-              </TableRowCell>
-            );
-          }
-
-          if (name === 'albumType') {
-            return (
-              <TableRowCell key={name}>
-                {albumType}
               </TableRowCell>
             );
           }
@@ -90,8 +81,8 @@ function MissingRow(props) {
             return (
               <AlbumSearchCellConnector
                 key={name}
-                albumId={id}
-                artistId={artist.id}
+                bookId={id}
+                authorId={artist.id}
                 albumTitle={title}
                 albumEntity={albumEntities.WANTED_MISSING}
                 showOpenArtistButton={true}
@@ -110,8 +101,7 @@ MissingRow.propTypes = {
   id: PropTypes.number.isRequired,
   artist: PropTypes.object.isRequired,
   releaseDate: PropTypes.string.isRequired,
-  foreignAlbumId: PropTypes.string.isRequired,
-  albumType: PropTypes.string.isRequired,
+  foreignBookId: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   disambiguation: PropTypes.string,
   isSelected: PropTypes.bool,

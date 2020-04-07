@@ -7,7 +7,7 @@ import styles from './AlbumDetailsLinks.css';
 
 function AlbumDetailsLinks(props) {
   const {
-    foreignAlbumId,
+    foreignBookId,
     links
   } = props;
 
@@ -16,14 +16,14 @@ function AlbumDetailsLinks(props) {
 
       <Link
         className={styles.link}
-        to={`https://musicbrainz.org/release-group/${foreignAlbumId}`}
+        to={`https://goodreads.com/book/show/${foreignBookId}`}
       >
         <Label
           className={styles.linkLabel}
           kind={kinds.INFO}
           size={sizes.LARGE}
         >
-          Musicbrainz
+          Goodreads
         </Label>
       </Link>
 
@@ -56,7 +56,7 @@ function AlbumDetailsLinks(props) {
 }
 
 AlbumDetailsLinks.propTypes = {
-  foreignAlbumId: PropTypes.string.isRequired,
+  foreignBookId: PropTypes.string.isRequired,
   links: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 

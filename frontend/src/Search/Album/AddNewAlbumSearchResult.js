@@ -69,16 +69,13 @@ class AddNewAlbumSearchResult extends Component {
 
   render() {
     const {
-      foreignAlbumId,
+      foreignBookId,
       title,
       releaseDate,
       disambiguation,
-      albumType,
-      secondaryTypes,
       overview,
       ratings,
       images,
-      releases,
       artist,
       isExistingAlbum,
       isExistingArtist,
@@ -89,7 +86,7 @@ class AddNewAlbumSearchResult extends Component {
       isNewAddAlbumModalOpen
     } = this.state;
 
-    const linkProps = isExistingAlbum ? { to: `/album/${foreignAlbumId}` } : { onPress: this.onPress };
+    const linkProps = isExistingAlbum ? { to: `/album/${foreignBookId}` } : { onPress: this.onPress };
 
     const height = calculateHeight(230, isSmallScreen);
 
@@ -107,6 +104,7 @@ class AddNewAlbumSearchResult extends Component {
               className={styles.poster}
               images={images}
               size={250}
+              lazy={false}
             />
           }
 
@@ -132,7 +130,7 @@ class AddNewAlbumSearchResult extends Component {
 
               <Link
                 className={styles.mbLink}
-                to={`https://musicbrainz.org/release-group/${foreignAlbumId}`}
+                to={`https://goodreads.com/book/show/${foreignBookId}`}
                 onPress={this.onMBLinkPress}
               >
                 <Icon
@@ -174,31 +172,6 @@ class AddNewAlbumSearchResult extends Component {
                   </Label>
               }
 
-              <Label size={sizes.LARGE}>
-                {releases.length} release{releases.length > 0 ? 's' : null}
-              </Label>
-
-              {
-                !!albumType &&
-                  <Label size={sizes.LARGE}>
-                    {albumType}
-                  </Label>
-              }
-
-              {
-                !!secondaryTypes &&
-                  secondaryTypes.map((item, i) => {
-                    return (
-                      <Label
-                        size={sizes.LARGE}
-                        key={i}
-                      >
-                        {item}
-                      </Label>
-                    );
-                  })
-              }
-
             </div>
 
             <div
@@ -219,7 +192,7 @@ class AddNewAlbumSearchResult extends Component {
         <AddNewAlbumModal
           isOpen={isNewAddAlbumModalOpen && !isExistingAlbum}
           isExistingArtist={isExistingArtist}
-          foreignAlbumId={foreignAlbumId}
+          foreignBookId={foreignBookId}
           albumTitle={title}
           disambiguation={disambiguation}
           artistName={artist.artistName}
@@ -233,17 +206,14 @@ class AddNewAlbumSearchResult extends Component {
 }
 
 AddNewAlbumSearchResult.propTypes = {
-  foreignAlbumId: PropTypes.string.isRequired,
+  foreignBookId: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  releaseDate: PropTypes.string.isRequired,
+  releaseDate: PropTypes.string,
   disambiguation: PropTypes.string,
-  albumType: PropTypes.string,
-  secondaryTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
   overview: PropTypes.string,
   ratings: PropTypes.object.isRequired,
   artist: PropTypes.object,
   images: PropTypes.arrayOf(PropTypes.object).isRequired,
-  releases: PropTypes.arrayOf(PropTypes.object).isRequired,
   isExistingAlbum: PropTypes.bool.isRequired,
   isExistingArtist: PropTypes.bool.isRequired,
   isSmallScreen: PropTypes.bool.isRequired
