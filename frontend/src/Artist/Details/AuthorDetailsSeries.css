@@ -99,7 +99,7 @@
 .expandButtonIcon {
   composes: actionButton;
 
-  marign-right: 15px;
+  margin-right: 15px;
 
   /* position: absolute; */
   /* top: 50%; */
